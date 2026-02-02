@@ -23,29 +23,29 @@ fi
 # Install system dependencies
 echo "Installing system dependencies..."
 
-# Install pip3 first (more reliable than PyQt5 packages)
+# Install python3 first
 if [ -x /usr/bin/zypper ] || command -v zypper &> /dev/null; then
-    echo "Using zypper to install pip..."
-    zypper install -y python3-pip
+    echo "Using zypper to install python3..."
+    zypper install -y python3
 elif [ -x /usr/bin/dnf ] || command -v dnf &> /dev/null; then
-    echo "Using dnf to install pip..."
-    dnf install -y python3-pip
+    echo "Using dnf to install python3..."
+    dnf install -y python3
 elif [ -x /usr/bin/apt ] || command -v apt &> /dev/null; then
-    echo "Using apt to install pip..."
-    apt update && apt install -y python3-pip
+    echo "Using apt to install python3..."
+    apt update && apt install -y python3
 else
     echo "No supported package manager found."
-    echo "Attempting to use pip3 directly..."
+    exit 1
 fi
 
-# Check if pip3 is available
-if ! command -v pip3 &> /dev/null; then
-    echo "Failed to install or find pip3"
+# Check if python3 is available
+if ! command -v python3 &> /dev/null; then
+    echo "Failed to install or find python3"
     exit 1
 fi
 
 echo "Installing PyQt5 via pip..."
-pip3 install PyQt5
+python3 -m pip install PyQt5
 
 if [ $? -ne 0 ]; then
     echo "Failed to install PyQt5"
