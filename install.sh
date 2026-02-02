@@ -10,16 +10,36 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Detect distribution
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    DISTRO=$ID
+else
+    echo "Cannot detect distribution"
+    exit 1
+fi
+
 # Install system dependencies
 echo "Installing system dependencies..."
-if command -v dnf &> /dev/null; then
-    dnf install -y python3-pyqt5 python3-pip
-elif command -v zypper &> /dev/null; then
-    zypper install -y python3-qt5 python3-pip
-elif command -v apt &> /dev/null; then
-    apt update && apt install -y python3-pyqt5 python3-pip
-else
-    echo "Unsupported package manager. Please install PyQt5 manually."
+case $DISTRO in
+    fedora|centos|rhel)
+        dnf install -y python3-pyqt5 python3-pip
+        ;;
+    opensuse*|sles)
+        zypper install -y python3-qt5 python3-pip
+        ;;
+    ubuntu|debian)
+        apt update && apt install -y python3-pyqt5 python3-pip
+        ;;
+    *)
+        echo "Unsupported distribution: $DISTRO"
+        echo "Please install PyQt5 and pip manually."
+        exit 1
+        ;;
+esac
+
+if [ $? -ne 0 ]; then
+    echo "Failed to install system dependencies"
     exit 1
 fi
 
@@ -33,6 +53,11 @@ cp main.py requirements.txt "$INSTALL_DIR/"
 # Install Python dependencies
 cd "$INSTALL_DIR"
 pip3 install -r requirements.txt
+
+if [ $? -ne 0 ]; then
+    echo "Failed to install Python dependencies"
+    exit 1
+fi
 
 # Create desktop entry
 DESKTOP_FILE="/usr/share/applications/rpminstaller.desktop"
