@@ -22,11 +22,11 @@ fi
 
 # Install system dependencies
 echo "Installing system dependencies..."
-if command -v zypper &> /dev/null; then
+if [ -x /usr/bin/zypper ] || command -v zypper &> /dev/null; then
     zypper install -y python3-qt5 python3-pip
-elif command -v dnf &> /dev/null; then
+elif [ -x /usr/bin/dnf ] || command -v dnf &> /dev/null; then
     dnf install -y python3-pyqt5 python3-pip
-elif command -v apt &> /dev/null; then
+elif [ -x /usr/bin/apt ] || command -v apt &> /dev/null; then
     apt update && apt install -y python3-pyqt5 python3-pip
 else
     echo "Unsupported package manager. Please install PyQt5 and pip manually."
