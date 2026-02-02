@@ -14,6 +14,7 @@ fi
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     DISTRO=$ID
+    echo "Detected distribution: $DISTRO"
 else
     echo "Cannot detect distribution"
     exit 1
