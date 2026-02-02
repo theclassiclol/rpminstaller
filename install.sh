@@ -22,21 +22,43 @@ fi
 
 # Install system dependencies
 echo "Installing system dependencies..."
-if [ -x /usr/bin/zypper ] || command -v zypper &> /dev/null; then
-    zypper install -y python3-qt5 python3-pip
-elif [ -x /usr/bin/dnf ] || command -v dnf &> /dev/null; then
-    dnf install -y python3-pyqt5 python3-pip
-elif [ -x /usr/bin/apt ] || command -v apt &> /dev/null; then
-    apt update && apt install -y python3-pyqt5 python3-pip
-else
-    echo "Unsupported package manager. Please install PyQt5 and pip manually."
-    exit 1
-fi
 
-if [ $? -ne 0 ]; then
+# Try to install system PyQt5 package, with fallback to pip
+install_pyqt5() {
+    if [ -x /usr/bin/zypper ] || command -v zypper &> /dev/null; then
+        echo "Using zypper for installation..."
+        zypper install -y python3-qt5 python3-pip || {
+            echo "Failed to install python3-qt5, trying alternative..."
+            zypper install -y python311-qt5 python3-pip || pip3 install PyQt5
+        }
+    elif [ -x /usr/bin/dnf ] || command -v dnf &> /dev/null; then
+        echo "Using dnf for installation..."
+        dnf install -y python3-pyqt5 python3-pip || {
+            echo "Failed to install python3-pyqt5, trying with pip..."
+            dnf install -y python3-pip
+            pip3 install PyQt5
+        }
+    elif [ -x /usr/bin/apt ] || command -v apt &> /dev/null; then
+        echo "Using apt for installation..."
+        apt update && apt install -y python3-pyqt5 python3-pip || {
+            echo "Failed to install python3-pyqt5, trying with pip..."
+            apt install -y python3-pip
+            pip3 install PyQt5
+        }
+    else
+        echo "No supported package manager found. Attempting pip install..."
+        if ! command -v pip3 &> /dev/null; then
+            echo "pip3 not found. Please install PyQt5 manually."
+            return 1
+        fi
+        pip3 install PyQt5
+    fi
+}
+
+install_pyqt5 || {
     echo "Failed to install system dependencies"
     exit 1
-fi
+}
 
 # Create installation directory
 INSTALL_DIR="/opt/rpminstaller"
