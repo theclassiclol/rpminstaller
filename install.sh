@@ -23,16 +23,16 @@ fi
 # Install system dependencies
 echo "Installing system dependencies..."
 
-# Install python3 first
+# Install python3 and pip3
 if [ -x /usr/bin/zypper ] || command -v zypper &> /dev/null; then
-    echo "Using zypper to install python3..."
-    zypper install -y python3
+    echo "Using zypper to install python3 and pip..."
+    zypper install -y python3 python3-pip
 elif [ -x /usr/bin/dnf ] || command -v dnf &> /dev/null; then
-    echo "Using dnf to install python3..."
-    dnf install -y python3
+    echo "Using dnf to install python3 and pip..."
+    dnf install -y python3 python3-pip
 elif [ -x /usr/bin/apt ] || command -v apt &> /dev/null; then
-    echo "Using apt to install python3..."
-    apt update && apt install -y python3
+    echo "Using apt to install python3 and pip..."
+    apt update && apt install -y python3 python3-pip
 else
     echo "No supported package manager found."
     exit 1
