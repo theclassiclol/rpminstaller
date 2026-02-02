@@ -22,22 +22,16 @@ fi
 
 # Install system dependencies
 echo "Installing system dependencies..."
-case $DISTRO in
-    fedora|centos|rhel)
-        dnf install -y python3-pyqt5 python3-pip
-        ;;
-    opensuse*|sles)
-        zypper install -y python3-qt5 python3-pip
-        ;;
-    ubuntu|debian)
-        apt update && apt install -y python3-pyqt5 python3-pip
-        ;;
-    *)
-        echo "Unsupported distribution: $DISTRO"
-        echo "Please install PyQt5 and pip manually."
-        exit 1
-        ;;
-esac
+if command -v zypper &> /dev/null; then
+    zypper install -y python3-qt5 python3-pip
+elif command -v dnf &> /dev/null; then
+    dnf install -y python3-pyqt5 python3-pip
+elif command -v apt &> /dev/null; then
+    apt update && apt install -y python3-pyqt5 python3-pip
+else
+    echo "Unsupported package manager. Please install PyQt5 and pip manually."
+    exit 1
+fi
 
 if [ $? -ne 0 ]; then
     echo "Failed to install system dependencies"
