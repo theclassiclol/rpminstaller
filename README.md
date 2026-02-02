@@ -56,14 +56,6 @@ Or using git (if repo is cloned):
 cd rpminstaller && sudo ./uninstall.sh
 ```
 
-## Uninstallation
-
-To remove the application and desktop entry:
-
-```bash
-sudo ./uninstall.sh
-```
-
 ## Usage
 
 - Launch from the applications menu or run `python3 /opt/rpminstaller/main.py`
