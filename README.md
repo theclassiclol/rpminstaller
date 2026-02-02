@@ -15,10 +15,16 @@ A modern graphical installer for RPM packages on Linux distributions that suppor
 
 ### One-Command Installation
 
-To install the application system-wide and add it to the start menu:
+Install the application system-wide and add it to the start menu with a single command:
 
 ```bash
-sudo ./install.sh
+curl -sSL https://raw.githubusercontent.com/theclassiclol/rpminstaller/main/install.sh | sudo bash
+```
+
+Or using git:
+
+```bash
+git clone https://github.com/theclassiclol/rpminstaller.git && cd rpminstaller && sudo ./install.sh
 ```
 
 This will:
@@ -29,9 +35,26 @@ This will:
 
 ### Manual Installation
 
-1. Clone or download the repository.
-2. Install dependencies: `pip install -r requirements.txt`
-3. Run: `python main.py`
+1. Clone the repository: `git clone https://github.com/theclassiclol/rpminstaller.git`
+2. Navigate to the directory: `cd rpminstaller`
+3. Install dependencies: `pip install -r requirements.txt`
+4. Run: `python main.py`
+
+## Uninstallation
+
+### One-Command Uninstallation
+
+Remove the application and desktop entry:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/theclassiclol/rpminstaller/main/uninstall.sh | sudo bash
+```
+
+Or using git (if repo is cloned):
+
+```bash
+cd rpminstaller && sudo ./uninstall.sh
+```
 
 ## Uninstallation
 
